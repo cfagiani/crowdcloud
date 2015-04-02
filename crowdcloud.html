@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+
+    <title>CrowdCloud</title>
+
+
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="crowdcloud.css">
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="jumbotron">
+        <h1>CrowdCloud for the Buffalo News</h1>
+        <p class="lead">This site shows what's currently a hot topic of conversation in the comments section of <a href="http://www.buffalonews.com">The Buffalo News</a> in the form of a word cloud.</p>
+    </div>
+
+    <div class="row marketing">
+        <div class="col-lg-6">
+            <h4>How does this work?</h4>
+            <p>The script downloadPosts.py will use the Disqus Posts API to download all the posts for a single forum for a given time range and write them to a file. The buildCloud.py script then can take that output file and build a JSON object containing the word frequencies. All words in the stopwords.txt file will be excluded from the cloud.</p>
+
+            <h4>Where did this data come from?</h4>
+            <p>The word cloud on this site came from <a href="http://www.buffalonews.com">The Buffalo News</a>. The comments come from across all the articles published on the site. The words are presented in descending order of frequency (anything that appears to form a sentence is purely coincidental).</p>
+
+            <h4>Where can I get the source code?</h4>
+            <p>The source is hosted in a <a href="https://github.com/cfagiani/crowdcloud">GitHub repository</a></p>
+        </div>
+
+        <div class="col-lg-6">
+            <div id="tagCloud"></div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2015</p>
+    </div>
+
+</div> <!-- /container -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" language="javascript" src="cloud.json"></script>
+<script type="text/javascript">
+	$(document).ready(function(e){
+		$("<ul>").attr("id", "tagList").appendTo("#tagCloud");
+		$.each(words, function(i, val) {
+                         
+  			//create item
+  			var li = $("<li>");                         
+  			//create link
+  			var link, title = ""
+  			for (var k in val.articles){
+  				link = k
+  				title = val.articles[k]
+  			}
+  			$("<a>").text(val.word).attr({title:title, href:link, target:"_blank"}).appendTo(li);
+            li.children().css("fontSize", (val.count / 10 < 1) ? val.count / 10 + 1 + "em": (val.count / 10 > 2) ? "2em" : val.count / 10 + "em");
+            
+  			//add to list
+  			li.appendTo("#tagList");
+});
+
+	});
+</script>
+
+</body>
+</html>
