@@ -1,34 +1,40 @@
+"""
+__author__ = 'Christopher Fagiani'
+
+"""
 from disqusclient import Disqusclient
 import json
 import sys, argparse, dateutil.parser
 from datetime import datetime, timedelta
-
-USAGE = "downloadPosts.py [-i <interval hours>] -f <forumname> -k <key>"
 
 
 def main(args):
     """This program will download all the posts for a speific Disqus forum for a specific time interval (specified in hours on the command line)
     All data is written to a single output file as a well-formed JSON array.
     """
-    stop_date = datetime.utcnow() - timedelta(hours=int(args.interval))
-    
-    with open(args.outputFile,'w') as out_file:        
-        first = True
+    gather_data(args.forum,args.interval,args.outputFile,args.key)
+
+def gather_data(forum,interval, outputFile, apiKey):
+    """Performs the actual work of downloading the data and writing the output file
+    """
+    stop_date = datetime.utcnow() - timedelta(hours=int(interval))
+    with open(outputFile,'w') as out_file:        
         cursor = None
         last_date = None
         out_file.write("[")
-        apiClient = Disqusclient(args.key)
-        posts, cursor = processBatch(apiClient,args.forum,None,stop_date)
-        writeResults(posts,out_file,True)
+        apiClient = Disqusclient(apiKey)
+        posts, cursor = process_batch(apiClient,forum,None,stop_date)
+        write_results(posts,out_file,True)
        
         while cursor is not None:
-            posts, cursor = processBatch(apiClient,args.forum,cursor,stop_date)
-            writeResults(posts,out_file)
+            posts, cursor = process_batch(apiClient,forum,cursor,stop_date)
+            write_results(posts,out_file)
             
         out_file.write("]")
+    
 
 
-def writeResults(data, out_file, first=False):
+def write_results(data, out_file, first=False):
     """Writes the results to the file
     """
     for item in data:
@@ -38,12 +44,12 @@ def writeResults(data, out_file, first=False):
             first = False
         out_file.write(json.dumps(item))
 
-def processBatch(apiClient, forum, cursor,stop_date):
+def process_batch(apiClient, forum, cursor,stop_date):
     """Fetches a single batch of posts and checks the last date to see if we should stop processing
     this method returns the list of posts and the cursor string
     """
     last_date = None
-    posts,cursor = apiClient.fetchPosts(forum,cursor,True)
+    posts,cursor = apiClient.fetch_posts(forum,cursor,True)
     if(len(posts) > 0):
             last_date = dateutil.parser.parse(posts[-1]['date'])
     if(last_date == None or last_date < stop_date):

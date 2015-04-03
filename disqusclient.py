@@ -1,3 +1,7 @@
+"""
+__author__ = 'Christopher Fagiani'
+
+"""
 import requests, json
 
 BASE_URL = "https://disqus.com/api/3.0/"
@@ -15,7 +19,7 @@ class Disqusclient:
         self.threadDetails = {}
 
 
-    def fetchPosts(self,forum, nextCursor=None, augmented=True):
+    def fetch_posts(self,forum, nextCursor=None, augmented=True):
         """Fetches a list of posts (100 at a time) and returns the data (as a list of dictionaries) and the cursor string for the "next" page
 
         If the augmented flag is passed in as True, then this class will augment the post data with information from the corresponding thread
@@ -36,7 +40,7 @@ class Disqusclient:
                     'author':post['author'].get('username'),
                     'authorId':post['author'].get('id')}
             if(augmented):
-                threadData = self.getThreadDetails(item['threadId'])
+                threadData = self.get_thread_details(item['threadId'])
                 item['link']=threadData['link']
                 item['title']=threadData['title']
             results.append(item)
@@ -45,7 +49,9 @@ class Disqusclient:
             nextCursor = responseObj['cursor'].get('next')
         return results, nextCursor
 
-    def getThreadDetails(self, threadId):
+       
+
+    def get_thread_details(self, threadId):
         """Fetches the thread details from the api and caches them in memory
         
         """
