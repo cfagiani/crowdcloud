@@ -41,17 +41,17 @@ content="CrowdCloud for the Buffalo News" />
 
             <h4>Where did this data come from?</h4>
             <p>The word cloud on this site came from comments on <a href="http://www.buffalonews.com">The Buffalo News</a> site. The words are presented in descending order of frequency (anything that appears to form a sentence is purely coincidental).</p>
-            <p>The data is obtained automatically using a set of scripts written in Python. The script <a href="https://github.com/cfagiani/crowdcloud/blob/master/download_posts.py">download_posts.py</a> will use the Disqus Posts API to download all the posts for a single forum for a given time range and write them to a file. The <a href="https://github.com/cfagiani/crowdcloud/blob/master/build_cloud.py">build_cloud.py</a> script then can take that output file and build a JSON object containing the word frequencies. All words in the stopwords.txt file will be excluded from the cloud.</p>
+            <p>The data is obtained automatically using a set of scripts written in Python. The script <a href="https://github.com/cfagiani/crowdcloud/blob/master/download_posts.py" target='blank'>download_posts.py</a> will use the Disqus Posts API to download all the posts for a single forum for a given time range and write them to a file. The <a href="https://github.com/cfagiani/crowdcloud/blob/master/build_cloud.py" target='blank'>build_cloud.py</a> script then can take that output file and build a JSON object containing the word frequencies. All words in the stopwords.txt file will be excluded from the cloud.</p>
 
             <h4>Where can I get the source code?</h4>
-            <p>The source is hosted in a <a href="https://github.com/cfagiani/crowdcloud">GitHub repository</a></p>
+            <p>The source is hosted in a <a href="https://github.com/cfagiani/crowdcloud" target='blank'>GitHub repository</a></p>
 
             <h4>Other projects</h4>
             <p>A few other projects that may be of interest:</p>
             <ul>
-            <li><a href="http://www.cataractsoftware.com">Erie County Health Inspections</a>- A searchable map showing all the facilities inspected by the Erie County (NY) department of health. </li>
-            <li><a href="https://github.com/cfagiani/eriecountycheckbook">Erie County Checkbook</a>-  Code to view the data from the "Taxpayer Checkbook" published by the Erie County Comptroller in a more sensible format</li>
-            <li><a href="http://www.buffaloopendata.com/">Buffalo Open Data</a>- The Buffalo Open Data homepage</li>
+            <li><a href="http://www.cataractsoftware.com" target='blank'>Erie County Health Inspections</a>- A searchable map showing all the facilities inspected by the Erie County (NY) department of health. </li>
+            <li><a href="https://github.com/cfagiani/eriecountycheckbook" target='blank'>Erie County Checkbook</a>-  Code to view the data from the "Taxpayer Checkbook" published by the Erie County Comptroller in a more sensible format</li>
+            <li><a href="http://www.buffaloopendata.com/" target='blank'>Buffalo Open Data</a>- The Buffalo Open Data homepage</li>
             </ul>
         </div>
 
@@ -89,7 +89,6 @@ content="CrowdCloud for the Buffalo News" />
   			//create item
   			var li = $("<li>");                         
   			//create link
-  			var link, title = ""
   			var links = [];
   			var titles = [];
   			for (var k in val.articles){
@@ -99,7 +98,7 @@ content="CrowdCloud for the Buffalo News" />
   			if(links.length ==1){
 	  			$("<a>").text(val.word).attr({title:titles[0], href:links[0], target:"_blank"}).appendTo(li);
 	  		}else{
-	  			$("<a>").text(val.word).attr({title:title, href:"#"}).appendTo(li).click(function(e){ e.preventDefault(); openDialog(titles,links)});
+	  			$("<a>").text(val.word).attr({title:'Click for article list', href:"#"}).appendTo(li).click(function(e){ e.preventDefault(); openDialog(titles,links)});
 	  		}
             li.children().css("fontSize", (val.count / 10 < 1) ? val.count / 10 + 1 + "em": (val.count / 10 > 2) ? "2em" : val.count / 10 + "em");
             
