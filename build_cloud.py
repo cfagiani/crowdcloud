@@ -16,12 +16,12 @@ def main(args):
 def process_data(threshold,dataFile, stopwordsFile, outputFile, interval=None):
     with open(dataFile) as in_file:        
         data = json.load(in_file)
-        counts = build_counts(data,load_stopwords(stopwordsFile))
-        write_json(counts, outputFile,int(threshold),True,interval)
+        counts, articles, commentCount = build_counts(data,load_stopwords(stopwordsFile))
+        write_json(counts,articles,commentCount, outputFile,int(threshold),True,interval)
     
 
 
-def write_json(data,outputFile, threshold, asVariable=True, interval=None):
+def write_json(data,articleSet, commentCount, outputFile, threshold, asVariable=True, interval=None):
     """Writes a json file containing the count data for each word. If asVariable is true (the default), the data is output as a javascript variable declaration rather than a raw JSON array.
     """
     sortedData = sorted(data.items(),key=lambda x: x[1]['count'], reverse=True)
@@ -30,6 +30,8 @@ def write_json(data,outputFile, threshold, asVariable=True, interval=None):
         if asVariable:
             out_file.write("var lastUpdated='"+datetime.now().strftime("%D at %H:%M:%S")+"';\n")
             out_file.write("var threshold='"+str(threshold)+"';\n")
+            out_file.write("var commentCount='"+str(commentCount)+"';\n")
+            out_file.write("var articleCount='"+str(len(articleSet))+"';\n")
             if interval is not None:
                 out_file.write("var intervalHrs='"+interval+"';\n")
             else:
@@ -67,10 +69,14 @@ def build_counts(data, stop_words, lemmatize=True):
     and a dictionary of articles (keys = links, values = titles) for each article associated with the word.
     """
     words = {}
+    commentCount = 0
+    articles = set()
     lm = None
     if lemmatize:
         lm = initialize_lemmatizer()
     for item in data:
+        commentCount += 1
+        articles.add(item['link'])
         text = item['msg']
         for word in text.split():
             rawWord = sanitize_word(word)
@@ -89,7 +95,7 @@ def build_counts(data, stop_words, lemmatize=True):
                     record['count']=record['count']+1
                     record['articles'][item['link']]=item['title']
                     
-    return words
+    return words, articles, commentCount
 
 def initialize_lemmatizer():
     """Initializes the wordnet lemmatizer. You must install nltk and download
