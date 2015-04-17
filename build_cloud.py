@@ -115,7 +115,7 @@ def lemmatize_word(lm,word):
 def sanitize_word(word):
     """returns word after replacing common puctuation with the empty string
     """
-    word = word.replace(".","").replace(",","").replace("?","").replace(":","").replace("(","").replace(")","").replace("*","").replace(";","").replace('"',"")
+    word = word.replace(".","").replace(",","").replace("?","").replace(":","").replace("(","").replace(")","").replace("*","").replace(";","").replace('"',"").replace("!","")
     word = word.replace("]","").replace("[","")
     return word
                 
