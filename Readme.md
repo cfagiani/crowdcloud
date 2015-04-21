@@ -5,15 +5,15 @@ This project will build a simple word cloud based on the relative frequencies of
 
 Installation
 -------------
-*Install python 2.6+
-*Install the Requests library: sudo pip install requests
+* Install python 2.6+
+* Install the Requests library: sudo pip install requests
 
 If using the publisher as-is (i.e. with word lemmatization), follow these additional steps
-*Install the Natural Language Toolkit: sudo pip install ntlk
-*Launch the python interpreter and run:
+* Install the Natural Language Toolkit: sudo pip install ntlk
+* Launch the python interpreter and run:
 		import ntlk
 		ntlk.download()
-*Navigate to the Corpi page and select the WordNet corpus
+* Navigate to the Corpi page and select the WordNet corpus
 
 
 
