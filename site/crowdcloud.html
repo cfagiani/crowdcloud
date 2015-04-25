@@ -105,7 +105,7 @@ content="CrowdCloud for the Buffalo News" />
   			//add to list
   			li.appendTo("#tagList");
 });
-		$("<p>").text("Site generated "+lastUpdated+" using data from "+commentCount+" comments made on "+articleCount+" articles in the last "+intervalHrs+" hours and showing words with at least "+threshold+" occurences.").appendTo("#timestamp");
+		$("<p>").text("Site generated "+lastUpdated+" using data from "+commentCount+" comments made by "+authorCount+" authors ("+anonCount+" comments were anonymous) on "+articleCount+" articles in the last "+intervalHrs+" hours and showing words with at least "+threshold+" occurences.").appendTo("#timestamp");
 				
 	});
 	
