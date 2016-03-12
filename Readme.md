@@ -9,10 +9,10 @@ Installation
 * Install the Requests library: sudo pip install requests
 
 If using the publisher as-is (i.e. with word lemmatization), follow these additional steps
-* Install the Natural Language Toolkit: sudo pip install ntlk
+* Install the Natural Language Toolkit: sudo pip install nltk
 * Launch the python interpreter and run:
-		import ntlk
-		ntlk.download()
+		import nltk
+		nltk.download()
 * Navigate to the Corpi page and select the WordNet corpus
 
 
