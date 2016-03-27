@@ -583,6 +583,7 @@ rd
 re
 readily
 really
+realy
 recent
 recently
 ref
