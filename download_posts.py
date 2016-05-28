@@ -9,7 +9,8 @@ from datetime import datetime, timedelta
 
 
 def main(args):
-    """This program will download all the posts for a speific Disqus forum for a specific time interval (specified in hours on the command line)
+    """This program will download all the posts for a speific Disqus forum for a specific time interval
+    (specified in hours on the command line)
     All data is written to a single output file as a well-formed JSON array.
     """
     gather_data(args.forum,args.interval,args.outputFile,args.key)
@@ -22,12 +23,12 @@ def gather_data(forum,interval, outputFile, apiKey):
         cursor = None
         last_date = None
         out_file.write("[")
-        apiClient = Disqusclient(apiKey)
-        posts, cursor = process_batch(apiClient,forum,None,stop_date)
+        api_client = Disqusclient(apiKey)
+        posts, cursor = process_batch(api_client,forum,None,stop_date)
         write_results(posts,out_file,True)
        
         while cursor is not None:
-            posts, cursor = process_batch(apiClient,forum,cursor,stop_date)
+            posts, cursor = process_batch(api_client,forum,cursor,stop_date)
             write_results(posts,out_file)
             
         out_file.write("]")
@@ -38,7 +39,7 @@ def write_results(data, out_file, first=False):
     """Writes the results to the file
     """
     for item in data:
-        if(not first):
+        if not first:
             out_file.write(",\n")
         else:
             first = False
@@ -50,9 +51,9 @@ def process_batch(apiClient, forum, cursor,stop_date):
     """
     last_date = None
     posts,cursor = apiClient.fetch_posts(forum,cursor,True)
-    if(len(posts) > 0):
+    if len(posts) > 0:
             last_date = dateutil.parser.parse(posts[-1]['date'])
-    if(last_date == None or last_date < stop_date):
+    if last_date is None or last_date < stop_date:
         cursor = None
     return posts,cursor
 

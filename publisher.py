@@ -7,7 +7,8 @@ import download_posts, build_cloud
 
 
 def main(args):
-    """This program will use the download_posts and build_cloud modules to download all comment data and produce a tag cloud. It will then upload the resulting data to dropbox.
+    """This program will use the download_posts and build_cloud modules to download all comment data and produce a
+    tag cloud. It will then upload the resulting data to dropbox.
     """
     TEMP_DATA = "tempdata"
     TEMP_JSON = "cloud.json"

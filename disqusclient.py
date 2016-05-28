@@ -19,20 +19,22 @@ class Disqusclient:
         self.threadDetails = {}
 
 
-    def fetch_posts(self,forum, nextCursor=None, augmented=True):
-        """Fetches a list of posts (100 at a time) and returns the data (as a list of dictionaries) and the cursor string for the "next" page
+    def fetch_posts(self, forum, next_cursor=None, augmented=True):
+        """Fetches a list of posts (100 at a time) and returns the data (as a list of dictionaries) and the cursor
+        string for the "next" page
 
-        If the augmented flag is passed in as True, then this class will augment the post data with information from the corresponding thread
-        specifically the link and thread title. To minimize the number of api calls, the thread details are cached in memory so they are only fetched once.
+        If the augmented flag is passed in as True, then this class will augment the post data with information from the
+        corresponding thread specifically the link and thread title. To minimize the number of api calls, the thread
+        details are cached in memory so they are only fetched once.
         TODO: batch the requests to the threads api (it can take a series of "thread=" options
         """
         posts_url = BASE_URL + POSTS_API+"?forum="+forum+"&limit=100&api_key="+self.apiKey
-        if(nextCursor != None):
-            posts_url = posts_url+"&cursor="+nextCursor
+        if next_cursor is not None:
+            posts_url = posts_url+"&cursor=" + next_cursor
         response = requests.get(posts_url)
-        responseObj = json.loads(response.text)
+        response_obj = json.loads(response.text)
         results = []
-        for post in responseObj['response']:
+        for post in response_obj['response']:
             item = {'id':post['id'],
                     'msg':post['raw_message'],
                     'date':post['createdAt'],
@@ -40,14 +42,14 @@ class Disqusclient:
                     'author':post['author'].get('username'),
                     'authorId':post['author'].get('id')}
             if(augmented):
-                threadData = self.get_thread_details(item['threadId'])
-                item['link']=threadData['link']
-                item['title']=threadData['title']
+                thread_data = self.get_thread_details(item['threadId'])
+                item['link']=thread_data['link']
+                item['title']=thread_data['title']
             results.append(item)
-        nextCursor = None
-        if(responseObj['cursor'] != None):
-            nextCursor = responseObj['cursor'].get('next')
-        return results, nextCursor
+        next_cursor = None
+        if(response_obj['cursor'] != None):
+            next_cursor = response_obj['cursor'].get('next')
+        return results, next_cursor
 
        
 
@@ -56,12 +58,12 @@ class Disqusclient:
         
         """
         details =self.threadDetails.get(threadId)
-        if(details is not None):
+        if details is not None:
             return details
         else:
             response = requests.get(BASE_URL+THREADS_API+"?thread="+threadId+"&api_key="+self.apiKey)
-            responseObj = json.loads(response.text)
-            for thread in responseObj['response']:
+            response_obj = json.loads(response.text)
+            for thread in response_obj['response']:
                 item = {'id':thread['id'],
                         'link':thread['link'],
                         'title':thread['clean_title']}
